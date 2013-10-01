@@ -1,9 +1,9 @@
-name             'identity-wrapper'
+name             'keystone'
 maintainer       'SUSE Linux'
 maintainer_email 'cloud-devel@suse.de'
 license          'Apache 2.0'
 description      'Wraps the openstack-identity cookbook for crowbar barclamps'
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
 version          '0.1.0'
 
 %w{ suse }.each do |os|

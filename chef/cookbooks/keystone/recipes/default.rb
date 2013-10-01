@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: identity-wrapper
+# Cookbook Name:: keystone
 # Recipe:: default
 #
 # Copyright 2013, SUSE Linux GmbH
