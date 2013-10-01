@@ -31,7 +31,6 @@ node[:openstack][:db][:identity][:username] = node[:keystone][:db][:user]
 # if we want to use data bags
 node.set[:openstack][:db][:identity][:password] = db_password 'keystone'
 
-#### cargo culting from barclamp-keystone
 env_filter = " AND database_config_environment:database-config-#{node[:keystone][:database_instance]}"
 sqls = search(:node, "roles:database-server#{env_filter}") || []
 if sqls.length > 0
@@ -40,8 +39,6 @@ if sqls.length > 0
 else
     sql = node
 end
-
-########## end of cargo culting
 
 sql_address = Chef::Recipe::Barclamp::Inventory.get_network_by_type(sql, "admin").address if sql_address.nil?
 Chef::Log.info("Database server found at #{sql_address}")
@@ -54,7 +51,6 @@ node.set[:openstack][:db][:service_type] = sql[:database][:sql_engine]
 node.set[:openstack][:db][:identity][:host] = sql_address
 
 node.set[:openstack][:db][:identity][:db_type] = sql[:database][:sql_engine]
-Chef::Log.error(sql[:database][:sql_engine])
 node.set[:openstack][:db][:identity][:db_name] = node[:keystone][:db][:database]
 
 node.set[:openstack][:identity][:users] = {
