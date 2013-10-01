@@ -57,9 +57,24 @@ node.set[:openstack][:db][:identity][:db_type] = sql[:database][:sql_engine]
 Chef::Log.error(sql[:database][:sql_engine])
 node.set[:openstack][:db][:identity][:db_name] = node[:keystone][:db][:database]
 
-db_create_with_user("identity",
-  node[:openstack][:db][:identity][:username],
-  node[:openstack][:db][:identity][:password])
+node.set[:openstack][:identity][:users] = {
+  node[:keystone][:admin][:username] => {
+    :password => node[:keystone][:admin][:password],
+    :default_tenant => node[:keystone][:admin][:tenant],
+    :roles => {
+      :admin => [ node[:keystone][:admin][:tenant], node[:keystone][:default][:tenant] ]
+    }
+  },
+  node[:keystone][:default][:username] => {
+    :password => node[:keystone][:default][:password],
+    :default_tenant => node[:keystone][:default][:tenant],
+    :roles => {
+      "Member" => [ node[:keystone][:default][:tenant] ]
+    }
+  }
+}
+
+node.set[:openstack][:endpoints]["identity-api"][:scheme] = node[:keystone][:api][:protocol]
 
 include_recipe "openstack-identity::server"
 include_recipe "openstack-identity::registration"
