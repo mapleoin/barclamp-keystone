@@ -21,6 +21,9 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
+# TODO developer mode is set so we don't have to handle data bags yet
+node.set[:openstack][:developer_mode] = true
+
 node[:openstack][:db][:identity][:username] = node[:keystone][:db][:user]
 # TODO this used to be:
 # node.set_unless['keystone']['db']['password'] = secure_password
@@ -46,9 +49,6 @@ Chef::Log.info("Database server found at #{sql_address}")
 # TODO this will normally be set by the (opscode) database::server
 # recipe, but we haven't gotten to using that yet
 node[:postgresql][:password][:postgres] = 'secret'
-
-# TODO developer mode is set so we don't have to handle data bags yet
-node.set[:openstack][:developer_mode] = true
 
 node.set[:openstack][:db][:service_type] = sql[:database][:sql_engine]
 node.set[:openstack][:db][:identity][:host] = sql_address
